@@ -6,7 +6,12 @@ template<typename T>
 class MergeSort
 {
 public:
-	MergeSort(std::initializer_list<T>& values)
+	MergeSort(const std::initializer_list<T>& values)
+		: m_nums(values.begin(), values.end())
+	{
+	}
+
+	MergeSort(const std::vector<T>& values)
 		: m_nums(values.begin(), values.end())
 	{
 	}
