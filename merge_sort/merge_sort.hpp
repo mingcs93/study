@@ -2,6 +2,10 @@
 #include <iostream>
 #include <vector>
 
+/// <summary>
+/// πÈ≤¢≈≈–Ú
+/// </summary>
+/// <typeparam name="T"></typeparam>
 template<typename T>
 class MergeSort
 {

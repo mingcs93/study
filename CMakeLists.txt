@@ -16,3 +16,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build/bin)
 
 add_subdirectory(merge_sort)
 add_subdirectory(list)
+add_subdirectory(graph)
