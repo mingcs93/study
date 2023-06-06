@@ -2,7 +2,6 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 # project name and language
-project(mergeSort LANGUAGES CXX)
 set(target graph)
 
 

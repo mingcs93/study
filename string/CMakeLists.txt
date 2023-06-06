@@ -2,7 +2,7 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 # project name and language
-set(target list)
+set(target string)
 
 
 file(GLOB HEADER "*.hpp")

@@ -2,7 +2,8 @@
 cmake_minimum_required(VERSION 3.11 FATAL_ERROR)
 
 # project name and language
-set(target list)
+project(unionFind LANGUAGES CXX)
+set(target unionFind)
 
 
 file(GLOB HEADER "*.hpp")

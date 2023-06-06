@@ -118,9 +118,9 @@ public:
 		}
 
 		std::queue<std::shared_ptr<Node>> qNode;
-		std::unordered_set<std::shared_ptr<Node>> s;
+		std::unordered_set<std::shared_ptr<Node>> visited;
 		qNode.push(first);
-		s.insert(first);
+		visited.insert(first);
 
 		while (!qNode.empty())
 		{
@@ -130,10 +130,10 @@ public:
 
 			for (const auto& next : cur->nexts)
 			{
-				if (s.find(next) == s.cend())
+				if (visited.find(next) == visited.cend())
 				{
 					qNode.push(next);
-					s.insert(next);
+					visited.insert(next);
 				}
 			}
 		}
@@ -178,7 +178,7 @@ public:
 	std::vector<std::shared_ptr<Node>> sortedTopology()
 	{
 		std::queue<std::shared_ptr<Node>> zeroInQueue;  //入度为0的节点队列
-		std::unordered_map<std::shared_ptr<Node>, uint32_t> inMap;  //入度非0的节点与入度的映射
+		std::unordered_map<std::shared_ptr<Node>, uint32_t> inMap;  //某一个node对应剩余入度数
 
 		for (const auto& item : m_nodes)
 		{
