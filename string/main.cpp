@@ -108,12 +108,12 @@ int main(int argc, char** argv)
 	{
 		std::string str1 = "abadabadabag";
 		std::string str2 = "abadabag";
-		int32_t idx = KMPAlgorithm::get_index_of(str1, str2);
+		size_t idx = KMPAlgorithm::get_index_of(str1, str2);
 	}
 
 	{
 		std::string str1 = "abcdcbakskabcdcbagu";
-		int32_t idx = ManacherAlgorithm::maxPalindromeLength(str1);
+		size_t idx = ManacherAlgorithm::maxPalindromeLength(str1);
 	}
 	return 0;
 }

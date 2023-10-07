@@ -7,7 +7,7 @@ int main(int argc, char** argv)
     std::vector<int> nums{ 5,4,0,3,1,6,2 };
     UnionFind myUnion;
     myUnion.initialize(nums.size());
-    for (int idx = 0; idx < nums.size(); idx++) {
+    for (size_t idx = 0; idx < nums.size(); idx++) {
         int root1 = myUnion.find(idx);
         int root2 = myUnion.find(nums.at(idx));
         if (root1 == root2) continue;
