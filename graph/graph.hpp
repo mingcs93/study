@@ -17,7 +17,7 @@ struct Node
 	std::vector<std::shared_ptr<Node>> nexts;
 	std::vector<std::shared_ptr<Edge>> edges; //若为无向图，则每两个节点之间包含两条边
 
-	Node(const int64_t _value)
+	Node(int64_t _value)
 		: value(_value)
 		, in(0)
 		, out(0)
@@ -30,7 +30,7 @@ struct Edge
 	std::shared_ptr<Node> from;
 	std::shared_ptr<Node> to;
 
-	Edge(const int64_t _weight, const std::shared_ptr<Node>& _from, const std::shared_ptr<Node>& _to)
+	Edge(int64_t _weight, const std::shared_ptr<Node>& _from, const std::shared_ptr<Node>& _to)
 		: weight(_weight)
 		, from(_from)
 		, to(_to)
@@ -237,6 +237,110 @@ public:
 		return res;
 	}
 
+
+	/// <summary>
+	/// p算法，最小生成树
+	/// </summary>
+	/// <returns></returns>
+	std::vector<std::shared_ptr<Edge>> primMST()
+	{
+		std::priority_queue<std::shared_ptr<Edge>, std::vector<std::shared_ptr<Edge>>, EdgeCompare> edgePriorityQueue;
+		std::vector<std::shared_ptr<Edge>> res;
+		std::unordered_set<std::shared_ptr<Node>> selectedNodes;
+
+		for (const auto& node : m_nodes)
+		{
+			if (!selectedNodes.count(node.second))
+			{
+				selectedNodes.insert(node.second);
+				for (const auto& edge : node.second->edges)  //由一个点解锁所有相邻的边
+				{
+					edgePriorityQueue.push(edge);
+				}
+
+				while (!edgePriorityQueue.empty())
+				{
+					std::shared_ptr<Edge> edge = edgePriorityQueue.top();  //弹出解锁的边中，最小的边
+					edgePriorityQueue.pop();
+					std::shared_ptr<Node> toNode = edge->to;  //可能是一个新的点
+					if (!selectedNodes.count(toNode))
+					{
+						selectedNodes.insert(toNode);
+						res.push_back(edge);
+						for (const auto& nextEdge : toNode->edges)
+						{
+							edgePriorityQueue.push(nextEdge);
+						}
+					}
+				}
+			}
+		}
+
+		return res;
+	}
+
+
+	/// <summary>
+	/// Dijkstra算法,求一个图中一个点到其他所有点的最短路径的算法
+	/// 要求边的权重不能为负数（还是形成环的边的权重和不能为负数？）
+	/// </summary>
+	/// <param name="head"></param>
+	/// <returns></returns>
+	std::unordered_map<std::shared_ptr<Node>, int64_t> dijkstra(int64_t head)
+	{
+		std::unordered_map<std::shared_ptr<Node>, int64_t> distanceMap;
+		distanceMap[m_nodes[head]] = 0;
+
+		std::unordered_set<std::shared_ptr<Node>> selectedNode;
+		std::shared_ptr<Node> minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNode);
+
+		while (minNode != nullptr)
+		{
+			int64_t distance = distanceMap[minNode];
+			for (const auto& edge : minNode->edges)
+			{
+				std::shared_ptr<Node> toNode = edge->to;
+				if (distanceMap.find(toNode) == distanceMap.end())
+				{
+					distanceMap[toNode] = distance + edge->weight;
+				}
+				else
+				{
+					distanceMap[toNode] = std::min(distanceMap[toNode], distance + edge->weight);
+				}
+			}
+			selectedNode.insert(minNode);
+			minNode = getMinDistanceAndUnselectedNode(distanceMap, selectedNode);
+		}
+		return distanceMap;
+	}
+
+
+private:
+	/// <summary>
+	/// 从当前结果中选择路径最小的节点
+	/// </summary>
+	/// <param name="distanceMap"></param>
+	/// <param name="touchedNodes"></param>
+	/// <returns></returns>
+	std::shared_ptr<Node> getMinDistanceAndUnselectedNode(
+		const std::unordered_map<std::shared_ptr<Node>, int64_t>& distanceMap,
+		const std::unordered_set<std::shared_ptr<Node>>& touchedNodes)
+	{
+		std::shared_ptr<Node> minNode = nullptr;
+		int64_t minDistance = INT_MAX;
+		for (const auto& item : distanceMap)
+		{
+			std::shared_ptr<Node> node = item.first;
+			int64_t distance = item.second;
+			if (!touchedNodes.count(node) && distance < minDistance)
+			{
+				minDistance = distance;
+				minNode = node;
+			}
+		}
+		return minNode;
+	}
 
 private:
 	std::unordered_map<int64_t, std::shared_ptr<Node>> m_nodes;
